@@ -7,16 +7,18 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import static org.create4.utils.HelperMethods.*;
+import static org.create4.utils.Constants.*;
 
 public class TestMethods {
 
+    // Method is used to test the first part of the task;
+    // https://rahulshettyacademy.com/seleniumPractise/#/
     public static void seleniumUniversityTest(WebDriver driver, WebDriverWait wait){
         // TC ID 1
         // Opening browser and navigating to URL
@@ -77,7 +79,7 @@ public class TestMethods {
 
         // Verify the error message has been displayed
         String errorMessage = driver.findElement(By.className("promoInfo")).getText();
-        Assert.assertTrue(errorMessage.contains("Invalid code ..!"));
+        Assert.assertTrue(errorMessage.contains(PROMO_CODE_FAILURE_MESSAGE));
 
         // TC ID 5
         // Clicking on the Place Order button
@@ -110,15 +112,17 @@ public class TestMethods {
 
         // Waiting for the Success message
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//span[contains(text(),'Thank you, your order has been placed successfully')]")));
+                By.xpath("//span[contains(text(),'" + SUCCESS_MESSAGE + "')]")));
 
         // Verifying that the correct success message has been displayed
         Assert.assertTrue(driver.findElement(
-                        By.xpath("//span[contains(text(),'Thank you, your order has been placed successfully')]"))
+                        By.xpath("//span[contains(text(),'" + SUCCESS_MESSAGE + "')]"))
                 .isDisplayed());
 
     }
 
+    // Method is used to test the second part of the task;
+    // http://www.webdriveruniversity.com/
     public static void webDriverUniversityTest(WebDriver driver){
 
         // TC ID 8
@@ -140,25 +144,24 @@ public class TestMethods {
         actions.perform();
 
         // Taking a screenshot
-        File actionsTab = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-        String screenshotBase64 = ((TakesScreenshot)driver).getScreenshotAs(OutputType.BASE64);
+        ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        ((TakesScreenshot)driver).getScreenshotAs(OutputType.BASE64);
 
         // TC ID 9.2.
         // Clicking on the Actions section
         actionsSection.click();
 
-        ArrayList<String> tabs = new ArrayList<> (driver.getWindowHandles());
-
         // TC ID 10.1.
         // Switching the driver to the Actions tab a verifying that it is opened correctly
+        ArrayList<String> tabs = new ArrayList<> (driver.getWindowHandles());
         driver.switchTo().window(tabs.get(2));
         Assert.assertTrue(driver.findElement(By.id("main-header")).getText()
-                .contains("The Key to Success is to take massive ACTION!"));
+                .contains(ACTIONS_HEADER));
 
         // TC ID 10.2.
         // Returning to the Home Page and taking a screenshot
         driver.switchTo().window(tabs.get(1));
-        File universityHomeTab = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 
         // TC ID 10.3.
         // Returning to the Actions tab and verifying name contains 'Actions'
@@ -174,7 +177,7 @@ public class TestMethods {
         actions.dragAndDrop(dragBox, dropBox).build().perform();
 
         // Asserting that it was successful
-        Assert.assertTrue(driver.findElement(By.id("droppable")).getText().contains("Dropped!"));
+        Assert.assertTrue(driver.findElement(By.id("droppable")).getText().contains(DROPPED_SUCCESSFUL_MESSAGE));
 
         // TC ID 12
         // Asserting that Link 1 is not visible
@@ -196,7 +199,7 @@ public class TestMethods {
         String alertMessage = driver.switchTo().alert().getText();
 
         // Asserting that the alert message is displayed
-        Assert.assertTrue(alertMessage.contains("Well done you clicked on the link!"));
+        Assert.assertTrue(alertMessage.contains(ALERT_MESSAGE));
 
         // TC ID 15
         // Clicking OK on the alert message
@@ -216,7 +219,7 @@ public class TestMethods {
         driver.get("http://www.webdriveruniversity.com/Contact-Us/contactus.html");
 
         // Asserting that the page is opened
-        Assert.assertTrue(driver.findElement(By.name("contactme")).getText().contains("CONTACT US"));
+        Assert.assertTrue(driver.findElement(By.name("contactme")).getText().contains(CONTACT_US_HEADER));
 
         // TC ID 18
         // Inserting the Alert message text inside the comments checkbox

@@ -9,8 +9,6 @@ import java.time.Duration;
 import static org.create4.utils.TestMethods.*;
 
 public class Create4 {
-    public Create4() {
-    }
 
     public static void main(String[] args){
 
