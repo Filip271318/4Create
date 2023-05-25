@@ -1,14 +1,18 @@
 package org.create4.utils;
 
+import org.create4.locators.SeleniumUniversityPOM;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 import java.util.Random;
 
 public class HelperMethods {
+
+    static SeleniumUniversityPOM locators;
 
      static void addRandomItemToCart(WebDriver driver, List<WebElement> elementList){
 
@@ -23,13 +27,15 @@ public class HelperMethods {
         elementList.remove(random);
     }
 
-    static int findCheapestItem(WebDriver driver) {
+    static int findCheapestItem(WebDriver driver, WebDriverWait wait) {
+
+         locators = new SeleniumUniversityPOM(driver, wait);
 
         List<WebElement> itemList =  driver.findElements(By.className("product"));
-        int lowestPrice = Integer.valueOf(itemList.get(0).findElement(By.className("product-price")).getText());
+        int lowestPrice = Integer.valueOf(locators.getProductPrice(itemList, 0));
         int cheapestItemNumber = 0;
         for(int i = 1; i < itemList.size()-1; i++) {
-            int currentItemPrice = Integer.valueOf(itemList.get(i).findElement(By.className("product-price")).getText());
+            int currentItemPrice = Integer.valueOf(locators.getProductPrice(itemList, i));
             if (currentItemPrice < lowestPrice){
                 lowestPrice = currentItemPrice;
                 cheapestItemNumber = i;
@@ -38,13 +44,15 @@ public class HelperMethods {
         return cheapestItemNumber;
     }
 
-    static int findMostExpensiveItem(WebDriver driver) {
+    static int findMostExpensiveItem(WebDriver driver, WebDriverWait wait) {
+
+        locators = new SeleniumUniversityPOM(driver, wait);
 
         List<WebElement> itemList =  driver.findElements(By.className("product"));
-        int highestPrice = Integer.valueOf(itemList.get(0).findElement(By.className("product-price")).getText());
+        int highestPrice = Integer.valueOf(locators.getProductPrice(itemList, 0));
         int mostExpensiveItemNumber = 0;
         for(int i = 1; i < itemList.size()-1; i++) {
-            int currentItemPrice = Integer.valueOf(itemList.get(i).findElement(By.className("product-price")).getText());
+            int currentItemPrice = Integer.valueOf(locators.getProductPrice(itemList, i));
             if (currentItemPrice > highestPrice){
                 highestPrice = currentItemPrice;
                 mostExpensiveItemNumber = i;
@@ -58,5 +66,14 @@ public class HelperMethods {
         JavascriptExecutor je =(JavascriptExecutor)driver;
         je.executeScript("window.scrollTo(0,\"randomElement.getLocation().x+\")");
         element.click();
+    }
+
+    static void selectRandomCountry(){
+
+        List<WebElement> countryList = locators.getCountryList();
+
+        Random r = new Random();
+        int random = r.nextInt(countryList.size() - 1) + 1;
+        countryList.get(random).click();
     }
 }
